@@ -1,0 +1,126 @@
+#Editor UI
+[[plugins]]
+repo = 'morhetz/gruvbox'
+
+[[plugins]]
+repo = 'hardcoreplayers/dashboard-nvim'
+hook_add = '''
+let g:dashboard_default_header = 'commicgirl9'
+let g:dashboard_default_executive ='fzf'
+nmap <Leader>ss :<C-u>SessionSave<CR>
+nmap <Leader>sl :<C-u>SessionLoad<CR>
+nmap <Leader>cn :<C-u>DashboardNewFile<CR>
+nnoremap <silent> <Leader>fh :History<CR>
+nnoremap <silent> <Leader>ff :Files<CR>
+nnoremap <silent> <Leader>tc :Colors<CR>
+nnoremap <silent> <Leader>fa :Rg<CR>
+nnoremap <silent> <Leader>fb :Marks<CR>
+''' 
+
+[[plugins]]
+repo = 'hardcoreplayers/vim-buffet'
+on_event = [["BufReadPre","BufNew"]]
+hook_add = '''
+nmap <leader>1 <Plug>BuffetSwitch(1)
+nmap <leader>2 <Plug>BuffetSwitch(2)
+nmap <leader>3 <Plug>BuffetSwitch(3)
+nmap <leader>4 <Plug>BuffetSwitch(4)
+nmap <leader>5 <Plug>BuffetSwitch(5)
+nmap <leader>6 <Plug>BuffetSwitch(6)
+nmap <leader>7 <Plug>BuffetSwitch(7)
+nmap <leader>8 <Plug>BuffetSwitch(8)
+nmap <leader>9 <Plug>BuffetSwitch(9)
+nmap <leader>0 <Plug>BuffetSwitch(10)
+'''
+
+[[plugins]]
+repo = 'ryanoasis/vim-devicons'
+
+[[plugins]]
+repo = 'hardcoreplayers/spaceline.vim'
+on_event = [["BufReadPre","BufNew"]]
+hook_add = '''
+let g:spaceline_seperate_style= 'arrow'
+let g:spaceline_colorscheme = 'one'
+let g:spaceline_custom_vim_status =  {"n": "[N] ","V":"[V-Line] ","v":"[V] ","\<C-v>": "[V-Block] ","i":"[I] ","R":"[R] ","s":"[S] ","t":"[T] ","c":"[C] ","!":"SE"}
+'''
+
+#Completion
+[[plugins]]
+repo = 'neoclide/coc.nvim'
+merged = 0
+rev = 'release'
+hook_add = 'source $VIM_PATH/cfg/coc_cfg.vim'
+
+[[plugins]]
+repo = 'honza/vim-snippets'
+depends = 'coc.nvim'
+
+#File Manager
+[[plugins]]
+repo = 'Shougo/defx.nvim'
+on_cmd = 'Defx'
+hook_add = 'source $VIM_PATH/cfg/defx_cfg.vim'
+
+[[plugins]]
+repo = 'kristijanhusak/defx-icons'
+on_source = 'defx.nvim'
+
+#Code
+[[plugins]]
+repo = 'Yggdroot/indentLine'
+hook_add = '''
+let g:indentLine_enabled = 1
+let g:indentLine_char='┆'
+let g:indentLine_fileTypeExclude = ['dashboard','defx', 'denite','startify','tagbar','vista_kind','vista']
+let g:indentLine_concealcursor = 'niv'
+let g:indentLine_color_term = 96
+"let g:indentLine_color_gui= '#725972'
+let g:indentLine_showFirstIndentLevel =1
+'''
+
+[[plugins]]
+repo = 'jiangmiao/auto-pairs'
+
+[[plugins]]
+repo = 'numirias/semshi'
+
+#Find Everything
+[[plugins]]
+repo = 'junegunn/fzf'
+build = './install --all'
+merged = 0
+
+[[plugins]]
+repo = 'junegunn/fzf.vim'
+depends = 'fzf'
+
+#EzMotion
+[[plugins]]
+repo = 'easymotion/vim-easymotion'
+hook_add = '''
+nmap ss <Plug>(easymotion-s2)
+'''
+#
+#[[plugins]]
+#repo = 'vim-airline/vim-airline'
+#hook_add = '''
+#let g:airline_powerline_fonts = 0
+#let g:airline#extensions#coc#enabled = 1
+#'''
+#
+#[[plugins]]
+#repo = 'vim-airline/vim-airline-themes'
+#hook_add = '''
+#let g:airline_theme='fruit_punch'
+#'''
+
+
+#[[plugins]]
+#repo = 'neomake/neomake'
+#hook_add = '''
+#call neomake#configure#automake('nrwi', 500)	" 自动检查
+#'''
+
+
+
