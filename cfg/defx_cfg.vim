@@ -7,13 +7,13 @@ call defx#custom#option('_', {
 			\ 'direction': 'topleft',
 			\ 'show_ignored_files': 0,
 			\ 'columns': 'mark:indent:git:icons:filename',
-			\ 'root_marker': '≡',
+			\ 'root_marker':'',
 			\ })
 
 call defx#custom#column('git', {
 			\   'indicators': {
-			\     'Modified'  : '•',
-			\     'Staged'    : '✚',
+			\     'Modified'  : '',
+			\     'Staged'    : '',
 			\     'Untracked' : 'ᵁ',
 			\     'Renamed'   : '≫',
 			\     'Unmerged'  : '≠',

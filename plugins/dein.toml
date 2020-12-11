@@ -43,6 +43,7 @@ hook_add = '''
 let g:spaceline_seperate_style= 'arrow'
 let g:spaceline_colorscheme = 'one'
 let g:spaceline_custom_vim_status =  {"n": "[N] ","V":"[V-Line] ","v":"[V] ","\<C-v>": "[V-Block] ","i":"[I] ","R":"[R] ","s":"[S] ","t":"[T] ","c":"[C] ","!":"SE"}
+let g:spaceline_git_branch_icon = ' '
 '''
 
 #Completion

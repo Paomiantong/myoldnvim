@@ -4,3 +4,5 @@ curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh >
 sh ./installer.sh ~/.cache/dein
 git clone https://github.com/Paomiantong/nvim.git ~/.config/nvim
 echo Finish
+echo pip install neovim
+echo npm install neovim
