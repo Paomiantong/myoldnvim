@@ -1,6 +1,12 @@
+#Runner
+[[plugins]]
+repo = 'hauleth/asyncdo.vim'
+
+
 #Editor UI
 [[plugins]]
-repo = 'morhetz/gruvbox'
+##repo = 'morhetz/gruvbox'
+repo = 'folke/tokyonight.nvim'
 
 [[plugins]]
 repo = 'hardcoreplayers/dashboard-nvim'
@@ -18,20 +24,31 @@ nnoremap <silent> <Leader>fb :Marks<CR>
 ''' 
 
 [[plugins]]
-repo = 'hardcoreplayers/vim-buffet'
-on_event = [["BufReadPre","BufNew"]]
+repo = 'akinsho/bufferline.nvim'
 hook_add = '''
-nmap <leader>1 <Plug>BuffetSwitch(1)
-nmap <leader>2 <Plug>BuffetSwitch(2)
-nmap <leader>3 <Plug>BuffetSwitch(3)
-nmap <leader>4 <Plug>BuffetSwitch(4)
-nmap <leader>5 <Plug>BuffetSwitch(5)
-nmap <leader>6 <Plug>BuffetSwitch(6)
-nmap <leader>7 <Plug>BuffetSwitch(7)
-nmap <leader>8 <Plug>BuffetSwitch(8)
-nmap <leader>9 <Plug>BuffetSwitch(9)
-nmap <leader>0 <Plug>BuffetSwitch(10)
+set termguicolors
+lua << EOF
+require("bufferline").setup{}
+EOF
 '''
+
+[[plugins]]
+repo = 'kyazdani42/nvim-web-devicons'
+#[[plugins]]
+#repo = 'hardcoreplayers/vim-buffet'
+#on_event = [["BufReadPre","BufNew"]]
+#hook_add = '''
+#nmap <leader>1 <Plug>BuffetSwitch(1)
+#nmap <leader>2 <Plug>BuffetSwitch(2)
+#nmap <leader>3 <Plug>BuffetSwitch(3)
+#nmap <leader>4 <Plug>BuffetSwitch(4)
+#nmap <leader>5 <Plug>BuffetSwitch(5)
+#nmap <leader>6 <Plug>BuffetSwitch(6)
+#nmap <leader>7 <Plug>BuffetSwitch(7)
+#nmap <leader>8 <Plug>BuffetSwitch(8)
+#nmap <leader>9 <Plug>BuffetSwitch(9)
+#nmap <leader>0 <Plug>BuffetSwitch(10)
+#'''
 
 [[plugins]]
 repo = 'ryanoasis/vim-devicons'
@@ -81,10 +98,22 @@ let g:indentLine_showFirstIndentLevel =1
 '''
 
 [[plugins]]
-repo = 'jiangmiao/auto-pairs'
+repo = 'nvim-treesitter/nvim-treesitter'
+hook_add = '''
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  highlight = {
+    enable = true,              -- false will disable the whole extension
+  },
+}
+EOF
+'''
 
 [[plugins]]
-repo = 'numirias/semshi'
+repo = 'jiangmiao/auto-pairs'
+
+#[[plugins]]
+#repo = 'numirias/semshi'
 
 #Find Everything
 [[plugins]]

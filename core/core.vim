@@ -44,9 +44,13 @@ set number
 " 高亮当前行
 set cursorline
 " 设置空白字符的视觉提示
-set list listchars=extends:❯,precedes:❮,trail:˽,tab:-\ 
+set list listchars=extends:❯,precedes:❮,trail:.,tab:!·\ 
 set ignorecase
 set smartcase
+
+set scrolloff=2         " Keep at least 2 lines above/below
+set fillchars+=vert:\|  " add a bar for vertical splits
+set fcs=eob:\           " hide ~ tila
 
 au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
 
@@ -81,7 +85,7 @@ endif
 filetype plugin indent on
 syntax enable
 
-colorscheme gruvbox
+colorscheme tokyonight
 set background=dark
 
 exe 'source $VIM_PATH/plugins/qrun.vim'
