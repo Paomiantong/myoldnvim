@@ -1,13 +1,13 @@
 function SelectLanguage() abort
-    let fn = expand("%:p")
-    let tar = expand("%:p:r")
+    let filename = expand("%:p")
+    let target = expand("%:p:r")
     let suffix = &filetype
     let language = {
-        \ 'c' : {'needCmpl': 1, 'cmd': [tar], 'cmplCmd': ['clang', fn, '-Wall', '-o', tar], 'clean': ['rm', '-rf', tar]},
-        \ 'cpp' : {'needCmpl': 1,'cmd': [tar], 'cmplCmd': ['clang++','-std=c++11', fn, '-Wall', '-o', tar], 'clean': ['rm', '-rf', tar]},
-        \ 'sh' : {'needCmpl': 0,'cmd': ['bash', fn]},
-        \ 'python': {'needCmpl': 0,'cmd': ['python3', fn]},
-        \ 'rust': {'needCmpl': 0,'cmd': ['cargo', 'run']},
+        \ 'c' : {'cmd': [target], 'cmplCmd': ['clang', filename, '-Wall', '-o', target], 'clean': ['rm', '-rf', target]},
+        \ 'cpp' : {'cmd': [target], 'cmplCmd': ['clang++','-std=c++11', filename, '-Wall', '-o', target], 'clean': ['rm', '-rf', target]},
+        \ 'sh' : {'cmd': ['bash', filename]},
+        \ 'python': {'cmd': ['python3', filename]},
+        \ 'rust': {'cmd': ['cargo', 'run']},
         \ }
     if(has_key(language, suffix))
         return language[suffix]
@@ -63,7 +63,7 @@ let s:runner_status = {
 
 function! s:start(task) abort
     let s:start_time = reltime()
-    if a:task.needCmpl
+    if has_key(a:task, 'cmplCmd')
         call Setlines(s:code_runner_bufnr, s:runner_lines, s:runner_lines+1, 0, ["[Compiling] " . join(a:task.cmplCmd, ' ')])
         let s:runner_lines += 1
         let s:runner_jobid = jobstart(a:task.cmplCmd, {'on_stdout': 'On_stdout', 'on_stderr' : 'On_stdout', 'on_exit': 'On_compile_exit'})
@@ -220,8 +220,6 @@ func! qrun#Run()
     call s:open_win()
     call s:start(task)
 endfunc
-
-nnoremap <F3> :call qrun#Run()<cr>
 
 command! Qrun call Qrun()
 
