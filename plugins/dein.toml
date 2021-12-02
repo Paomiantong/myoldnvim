@@ -1,6 +1,14 @@
-#Runner
 [[plugins]]
-repo = 'hauleth/asyncdo.vim'
+repo = 'folke/which-key.nvim'
+hook_add = '''
+lua << EOF
+  require("which-key").setup {
+    -- your configuration comes here
+    -- or leave it empty to use the default settings
+    -- refer to the configuration section below
+  }
+EOF
+'''
 
 
 #Editor UI

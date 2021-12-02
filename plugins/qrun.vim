@@ -1,38 +1,10 @@
-func! CommonRun()
-  exec "w"
-  if &filetype == 'c'
-    set splitright
-    exec "!clang % -Wall -o %<"
-    :vsp
-    :res -10
-    :term ./%<
-    exec "!rm -rf ./%<"
-  elseif &filetype == 'cpp'
-    set splitright
-    exec "!clang++ -std=c++11 % -Wall -o %<"
-    :vsp
-    :res -10
-    :term ./%<
-    exec "!rm -rf ./%<"
-  elseif &filetype == 'java'
-    exec "!javac %"
-    exec "!time java %<"
-  elseif &filetype == 'sh'
-    :!time bash %
-  elseif &filetype == 'python'
-    set splitright
-    :vsp
-    :term python3 %
-  endif
-endfunc
-
 function SelectLanguage() abort
-    let fn = expand("%:p:t")
-    let tar = expand("%:p:t:r")
+    let fn = expand("%:p")
+    let tar = expand("%:p:r")
     let suffix = &filetype
     let language = {
-        \ 'c' : {'needCmpl': 1, 'cmd': ['.\' . tar], 'cmplCmd': ['clang', fn, '-Wall', '-o', tar]},
-        \ 'cpp' : {'needCmpl': 1,'cmd': ['.\' . tar], 'cmplCmd': ['clang++','-std=c++11', fn, '-Wall', '-o', tar]},
+        \ 'c' : {'needCmpl': 1, 'cmd': [tar], 'cmplCmd': ['clang', fn, '-Wall', '-o', tar], 'clean': ['rm', '-rf', tar]},
+        \ 'cpp' : {'needCmpl': 1,'cmd': [tar], 'cmplCmd': ['clang++','-std=c++11', fn, '-Wall', '-o', tar], 'clean': ['rm', '-rf', tar]},
         \ 'sh' : {'needCmpl': 0,'cmd': ['bash', fn]},
         \ 'python': {'needCmpl': 0,'cmd': ['python3', fn]},
         \ 'rust': {'needCmpl': 0,'cmd': ['cargo', 'run']},
@@ -79,6 +51,7 @@ let g:code_runner_focus = 1
 
 let s:winid = -1
 let s:target = ''
+let s:cleanTarget = []
 let s:runner_lines = 0
 let s:runner_jobid = 0
 let s:compile_jobid = 0
@@ -91,14 +64,18 @@ let s:runner_status = {
 function! s:start(task) abort
     let s:start_time = reltime()
     if a:task.needCmpl
-        call Setlines(s:code_runner_bufnr, s:runner_lines, s:runner_lines+1, 0, ["[Compiling]"])
+        call Setlines(s:code_runner_bufnr, s:runner_lines, s:runner_lines+1, 0, ["[Compiling] " . join(a:task.cmplCmd, ' ')])
         let s:runner_lines += 1
         let s:runner_jobid = jobstart(a:task.cmplCmd, {'on_stdout': 'On_stdout', 'on_stderr' : 'On_stdout', 'on_exit': 'On_compile_exit'})
         let s:target = a:task.cmd
     else
-        call Setlines(s:code_runner_bufnr, s:runner_lines, s:runner_lines+1, 0, ["[Running]"])
+        call Setlines(s:code_runner_bufnr, s:runner_lines, s:runner_lines+1, 0, ["[Running] " . join(a:task.cmd, ' ')])
         let s:runner_lines += 1
         let s:runner_jobid = jobstart(a:task.cmd, {'on_stdout': 'On_stdout', 'on_stderr' : 'On_stdout', 'on_exit': 'On_exit'})
+    endif
+
+    if has_key(a:task, 'clean')
+        let s:cleanTarget = a:task.clean
     endif
 
     if s:runner_jobid > 0
@@ -122,7 +99,8 @@ function! s:open_win() abort
   nnoremap <silent><buffer> q :call <SID>close()<cr>
   nnoremap <silent><buffer> i :call <SID>insert()<cr>
   nnoremap <silent><buffer> <C-c> :call <SID>stop_runner()<cr>
-  augroup spacevim_runner
+  nnoremap <silent><buffer> <tab> <c-w>k <CR>
+  augroup runner
     autocmd!
     autocmd BufWipeout <buffer> call <SID>stop_runner()
   augroup END
@@ -183,9 +161,12 @@ function! On_exit(job_id, data, event) abort
   let s:end_time = reltime(s:start_time)
   let s:runner_status.is_running = 0
   let s:runner_status.exit_code = a:data
-  let done = ['', '[Done] exited with code=' . a:data . ' in ' . reltimestr(s:end_time) . ' seconds']
+  let done = ['', '[Done] exited with code=' . a:data . ' in' . reltimestr(s:end_time) . ' seconds']
   if bufexists(s:code_runner_bufnr)
     call Setlines(s:code_runner_bufnr, s:runner_lines , s:runner_lines + 1, 0, done)
+  endif
+  if len(s:cleanTarget) != 0
+    call jobstart(s:cleanTarget)
   endif
 endfunction
 
@@ -200,7 +181,7 @@ function! On_compile_exit(id, data, event) abort
     let s:end_time = reltime(s:start_time)
     let s:runner_status.is_running = 0
     let s:runner_status.exit_code = a:data
-    let done = ['', '[Done] exited with code=' . a:data . ' in ' . reltimestr(s:end_time) . ' seconds']
+    let done = ['', '[Done] exited with code=' . a:data . ' in' . reltimestr(s:end_time) . ' seconds']
     call Setlines(s:code_runner_bufnr, s:runner_lines , s:runner_lines + 1, 0, done)
   endif
 endfunction
@@ -222,6 +203,13 @@ function! Setlines(buffer, start, end, strict_indexing, replacement) abort
 endfunction
 " 执行job
 func! qrun#Run()
+    let task = SelectLanguage()
+    if has_key(task, 'NOTFOUND')
+        echomsg "[Runner]: This filetype is not supported"
+        return
+    endif
+    let s:target = ''
+    let s:cleanTarget = ''
     let s:runner_jobid = 0
     let s:runner_lines = 0
     let s:runner_status = {
@@ -229,10 +217,6 @@ func! qrun#Run()
         \ 'has_errors' : 0,
         \ 'exit_code' : 0
         \ }
-    let task = SelectLanguage()
-    if has_key(task, 'NOTFOUND')
-        return
-    endif
     call s:open_win()
     call s:start(task)
 endfunc
