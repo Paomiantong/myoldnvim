@@ -60,7 +60,7 @@ noremap a i
 noremap i a
 noremap A I
 noremap I A
-noremap ; :
+"noremap ; :
 inoremap jk <esc>
 
 noremap ;d :Dashboard<CR>

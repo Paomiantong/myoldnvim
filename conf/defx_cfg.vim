@@ -28,7 +28,7 @@ call defx#custom#column('mark', { 'readonly_icon': '', 'selected_icon': ''
 augroup user_plugin_defx
 	autocmd!
 	autocmd FileType defx call <SID>defx_mappings()
-	autocmd WinEnter * if &filetype == 'defx' && winnr('$') == 1 | bdel | endif
+    autocmd WinEnter * if &filetype == 'defx' && winnr('$') == 1 | bdel | endif
 	autocmd TabLeave * if &filetype == 'defx' | wincmd w | endif
 augroup END
 
@@ -51,7 +51,7 @@ endfunction
 
 
 function! s:defx_mappings() abort
-	setlocal signcolumn=no expandtab
+	setlocal signcolumn=no expandtab nonu norelativenumber
 	nnoremap <silent><buffer><expr> <CR>     <SID>defx_toggle_tree()                    " 打开或者关闭文件夹，文件
 	nnoremap <silent><buffer><expr> <C-h>     defx#do_action('toggle_ignored_files')     " 显示隐藏文件
 	nnoremap <silent><buffer><expr> c defx#do_action('copy')
@@ -84,6 +84,7 @@ function! s:defx_mappings() abort
 	nnoremap <silent><buffer><expr> 3u  defx#do_action('cd', ['../../..'])
 	nnoremap <silent><buffer><expr> 4u  defx#do_action('cd', ['../../../..'])
 	nnoremap <silent><buffer><expr> <leader>r defx#do_action('cd', $VIM_PATH)
+	nnoremap <silent><buffer> <tab> j
 
 endfunction
 

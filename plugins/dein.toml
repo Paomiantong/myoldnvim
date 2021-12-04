@@ -42,6 +42,9 @@ EOF
 
 [[plugins]]
 repo = 'kyazdani42/nvim-web-devicons'
+name = 'nvim-web-devicons'
+
+
 #[[plugins]]
 #repo = 'hardcoreplayers/vim-buffet'
 #on_event = [["BufReadPre","BufNew"]]
@@ -58,25 +61,29 @@ repo = 'kyazdani42/nvim-web-devicons'
 #nmap <leader>0 <Plug>BuffetSwitch(10)
 #'''
 
-[[plugins]]
-repo = 'ryanoasis/vim-devicons'
+#[[plugins]]
+##repo = 'hardcoreplayers/spaceline.vim'
+#repo = '/home/bkit/spaceline.vim'
+#on_event = [["BufReadPre","BufNew"]]
+#hook_add = '''
+#let g:spaceline_seperate_style= 'arrow-fade'
+#let g:spaceline_colorscheme = 'one'
+#let g:spaceline_custom_vim_status =  {"n": "[N] ","V":"[V-Line] ","v":"[V] ","\<C-v>": "[V-Block] ","i":"[I] ","R":"[R] ","s":"[S] ","t":"[T] ","c":"[C] ","!":"SE"}
+#let g:spaceline_git_branch_icon = ' '
+#'''
 
 [[plugins]]
-repo = 'hardcoreplayers/spaceline.vim'
-on_event = [["BufReadPre","BufNew"]]
-hook_add = '''
-let g:spaceline_seperate_style= 'arrow'
-let g:spaceline_colorscheme = 'one'
-let g:spaceline_custom_vim_status =  {"n": "[N] ","V":"[V-Line] ","v":"[V] ","\<C-v>": "[V-Block] ","i":"[I] ","R":"[R] ","s":"[S] ","t":"[T] ","c":"[C] ","!":"SE"}
-let g:spaceline_git_branch_icon = ' '
-'''
+repo = 'glepnir/galaxyline.nvim'
+rev = 'main'
+depends = 'nvim-web-devicons'
+hook_add = 'source $VIM_PATH/conf/statusline.lua'
 
 #Completion
 [[plugins]]
 repo = 'neoclide/coc.nvim'
 merged = 0
 rev = 'release'
-hook_add = 'source $VIM_PATH/cfg/coc_cfg.vim'
+hook_add = 'source $VIM_PATH/conf/coc_cfg.vim'
 
 [[plugins]]
 repo = 'honza/vim-snippets'
@@ -86,7 +93,7 @@ depends = 'coc.nvim'
 [[plugins]]
 repo = 'Shougo/defx.nvim'
 on_cmd = 'Defx'
-hook_add = 'source $VIM_PATH/cfg/defx_cfg.vim'
+hook_add = 'source $VIM_PATH/conf/defx_cfg.vim'
 
 [[plugins]]
 repo = 'kristijanhusak/defx-icons'

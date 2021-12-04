@@ -7,7 +7,7 @@ function SelectLanguage() abort
         \ 'cpp' : {'cmd': [target], 'cmplCmd': ['clang++','-std=c++11', filename, '-Wall', '-o', target], 'clean': ['rm', '-rf', target]},
         \ 'sh' : {'cmd': ['bash', filename]},
         \ 'python': {'cmd': ['python3', filename]},
-        \ 'rust': {'cmd': ['cargo', 'run']},
+        \ 'rust': {'cmd': ['cargo', 'run'], 'env': {'RUST_BACKTRACE': 1}},
         \ }
     if(has_key(language, suffix))
         return language[suffix]
@@ -63,15 +63,24 @@ let s:runner_status = {
 
 function! s:start(task) abort
     let s:start_time = reltime()
+    let opts = {
+            \ 'on_stdout': 'On_stdout', 
+            \ 'on_stderr' : 'On_stdout', 
+            \ }
+
+    if has_key(a:task, 'env')
+        let opts = extend(opts, {'env': a:task.env})
+    endif
+
     if has_key(a:task, 'cmplCmd')
         call Setlines(s:code_runner_bufnr, s:runner_lines, s:runner_lines+1, 0, ["[Compiling] " . join(a:task.cmplCmd, ' ')])
         let s:runner_lines += 1
-        let s:runner_jobid = jobstart(a:task.cmplCmd, {'on_stdout': 'On_stdout', 'on_stderr' : 'On_stdout', 'on_exit': 'On_compile_exit'})
+        let s:runner_jobid = jobstart(a:task.cmplCmd, extend(opts, {'on_exit': 'On_compile_exit'}))
         let s:target = a:task.cmd
     else
         call Setlines(s:code_runner_bufnr, s:runner_lines, s:runner_lines+1, 0, ["[Running] " . join(a:task.cmd, ' ')])
         let s:runner_lines += 1
-        let s:runner_jobid = jobstart(a:task.cmd, {'on_stdout': 'On_stdout', 'on_stderr' : 'On_stdout', 'on_exit': 'On_exit'})
+        let s:runner_jobid = jobstart(a:task.cmd, extend(opts, {'on_exit': 'On_exit'}))
     endif
 
     if has_key(a:task, 'clean')
@@ -95,7 +104,7 @@ function! s:open_win() abort
   let lines = &lines * 30 / 100
   exe 'resize ' . lines
   setlocal buftype=nofile bufhidden=wipe nobuflisted nolist noswapfile nowrap cursorline nospell nonu norelativenumber winfixheight nomodifiable
-  set filetype=Runner
+  set filetype=runner
   nnoremap <silent><buffer> q :call <SID>close()<cr>
   nnoremap <silent><buffer> i :call <SID>insert()<cr>
   nnoremap <silent><buffer> <C-c> :call <SID>stop_runner()<cr>
@@ -118,6 +127,8 @@ function! s:insert() abort
   call inputsave()
   let input = input('input >')
   if !empty(input) && s:runner_status.is_running == 1
+    call Setlines(s:code_runner_bufnr, s:runner_lines , s:runner_lines + 1, 0, [input])
+    let s:runner_lines+=1
     call s:send(s:runner_jobid, input)
   endif
   normal! :
@@ -200,6 +211,16 @@ function! Setlines(buffer, start, end, strict_indexing, replacement) abort
     call nvim_win_set_cursor(s:winid, [nvim_buf_line_count(s:code_runner_bufnr), 1])
     call setbufvar(a:buffer, '&ma', ma)
   endif
+endfunction
+
+" 获取job名称
+function qrun#GetJobStatus() abort
+    return s:runner_status.is_running ? "Running" : "Done"
+endfunction
+
+" 获取jobID
+function qrun#GetJobId() abort
+    return s:runner_jobid == 0 ? s:compile_jobid : s:runner_jobid
 endfunction
 " 执行job
 func! qrun#Run()

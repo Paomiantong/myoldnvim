@@ -41,14 +41,17 @@ set selection=exclusive
 set selectmode=mouse,key
 " 显示行号
 set number
+set relativenumber
 " 高亮当前行
 set cursorline
 " 设置空白字符的视觉提示
 set list listchars=extends:❯,precedes:❮,trail:.,tab:!·\ 
 set ignorecase
 set smartcase
+" 设置不隐藏字符例如json的引号
+set conceallevel=0
 
-set scrolloff=2         " Keep at least 2 lines above/below
+set scrolloff=5         " Keep at least 2 lines above/below
 set fillchars+=vert:\|  " add a bar for vertical splits
 set fcs=eob:\           " hide ~ tila
 
