@@ -1,9 +1,9 @@
 local gl = require('galaxyline')
 local gls = gl.section
 local buffer = require('galaxyline.provider_buffer')
--- local extension = require('galaxyline.provider_extensions')
 
 gl.short_line_list = {
+    'dashboard',
     'runner',
     'defx',
     'LuaTree',
@@ -16,8 +16,6 @@ gl.short_line_list = {
     'fugitiveblame',
     'plug'
 }
-
--- VistaPlugin = extension.vista_nearest
 
 local colors = {
     bg = '#282c34',
@@ -167,31 +165,41 @@ gls.left[2] = {
     highlight = {colors.bg,colors.line_bg,'bold'},
   },
 }
+
 gls.left[3] ={
   FileIcon = {
-    provider = {'FileIcon','FileName'},
+    provider = 'FileIcon',
     condition = buffer_not_empty,
     highlight = {require('galaxyline.provider_fileinfo').get_file_icon_color,colors.line_bg},
+  },
+}
+
+gls.left[4] ={
+  FileName = {
+    provider = 'FileName',
+    condition = buffer_not_empty,
+    highlight = {colors.darkgray, colors.line_bg},
     separator = ' ',
     separator_highlight = {colors.darkgray, colors.line_bg},
   },
 }
-gls.left[4] = {
-  FileName = {
+
+gls.left[5] = {
+  FileSize = {
     provider = 'FileSize',
     condition = buffer_not_empty,
     highlight = {colors.purple,colors.line_bg,'bold'},
   }
 }
 
-gls.left[5] = {
+gls.left[6] = {
   GitIcon = {
     provider = function() return '  ' end,
     condition = require('galaxyline.condition').check_git_workspace,
     highlight = {colors.darkgray,colors.line_bg},
   }
 }
-gls.left[6] = {
+gls.left[7] = {
   GitBranch = {
     provider = 'GitBranch',
     condition = require('galaxyline.condition').check_git_workspace,
@@ -207,7 +215,7 @@ local checkwidth = function()
   return false
 end
 
-gls.left[7] = {
+gls.left[8] = {
   DiffAdd = {
     provider = 'DiffAdd',
     condition = checkwidth,
@@ -215,7 +223,7 @@ gls.left[7] = {
     highlight = {colors.green,colors.line_bg},
   }
 }
-gls.left[8] = {
+gls.left[9] = {
   DiffModified = {
     provider = 'DiffModified',
     condition = checkwidth,
@@ -223,7 +231,7 @@ gls.left[8] = {
     highlight = {colors.orange,colors.line_bg},
   }
 }
-gls.left[9] = {
+gls.left[10] = {
   DiffRemove = {
     provider = 'DiffRemove',
     condition = checkwidth,
@@ -231,7 +239,7 @@ gls.left[9] = {
     highlight = {colors.red,colors.line_bg},
   }
 }
-gls.left[10] = {
+gls.left[11] = {
   LeftEnd = {
     provider = function() return '|' end,
     separator = '',
@@ -240,7 +248,7 @@ gls.left[10] = {
   }
 }
 
-gls.left[11] = {
+gls.left[12] = {
     TrailingWhiteSpace = {
      provider = TrailingWhiteSpace,
      icon = '  ',
@@ -248,20 +256,20 @@ gls.left[11] = {
     }
 }
 
-gls.left[12] = {
+gls.left[13] = {
   DiagnosticError = {
     provider = 'DiagnosticError',
     icon = '  ',
     highlight = {colors.red,colors.bg}
   }
 }
-gls.left[13] = {
+gls.left[14] = {
   Space = {
    provider = function () return ' ' end,
    highlight = {colors.line_bg, colors.bg}
   }
 }
-gls.left[14] = {
+gls.left[15] = {
   DiagnosticWarn = {
     provider = 'DiagnosticWarn',
     icon = '  ',
@@ -270,7 +278,7 @@ gls.left[14] = {
 }
 
 
-gls.left[15] = {
+gls.left[16] = {
     CocStatus = {
      provider = CocStatus,
      highlight = {colors.green,colors.bg},
@@ -278,7 +286,7 @@ gls.left[15] = {
     }
 }
 
-gls.left[16] = {
+gls.left[17] = {
   CocFunc = {
     provider = CocFunc,
     icon = '  λ ',

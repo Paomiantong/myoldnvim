@@ -1,3 +1,6 @@
+highlight RunnerOut guifg=#FFFF00 
+syntax keyword RunnerOut SB
+
 function SelectLanguage() abort
     let filename = expand("%:p")
     let target = expand("%:p:r")
@@ -241,6 +244,11 @@ func! qrun#Run()
     call s:open_win()
     call s:start(task)
 endfunc
+
+function qrun#Test() abort
+    call s:open_win()
+    call Setlines(s:code_runner_bufnr, 0, 1, 0, ['[asd] as'])
+endfunction
 
 command! Qrun call Qrun()
 

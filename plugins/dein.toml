@@ -1,3 +1,8 @@
+#base
+[[plugins]]
+repo = 'nvim-lua/plenary.nvim'
+
+#miscs
 [[plugins]]
 repo = 'folke/which-key.nvim'
 hook_add = '''
@@ -10,11 +15,18 @@ lua << EOF
 EOF
 '''
 
-
 #Editor UI
 [[plugins]]
 ##repo = 'morhetz/gruvbox'
 repo = 'folke/tokyonight.nvim'
+
+[[plugins]]
+repo = 'sindrets/diffview.nvim'
+hook_add = '''lua require('config.diffview')'''
+
+[[plugins]]
+repo = 'lewis6991/gitsigns.nvim'
+hook_add = '''lua require('config.gitsigns')'''
 
 [[plugins]]
 repo = 'hardcoreplayers/dashboard-nvim'
@@ -35,48 +47,18 @@ nnoremap <silent> <Leader>fb :Marks<CR>
 repo = 'akinsho/bufferline.nvim'
 hook_add = '''
 set termguicolors
-lua << EOF
-require("bufferline").setup{}
-EOF
+lua require('config.bufferline')
 '''
 
 [[plugins]]
 repo = 'kyazdani42/nvim-web-devicons'
 name = 'nvim-web-devicons'
 
-
-#[[plugins]]
-#repo = 'hardcoreplayers/vim-buffet'
-#on_event = [["BufReadPre","BufNew"]]
-#hook_add = '''
-#nmap <leader>1 <Plug>BuffetSwitch(1)
-#nmap <leader>2 <Plug>BuffetSwitch(2)
-#nmap <leader>3 <Plug>BuffetSwitch(3)
-#nmap <leader>4 <Plug>BuffetSwitch(4)
-#nmap <leader>5 <Plug>BuffetSwitch(5)
-#nmap <leader>6 <Plug>BuffetSwitch(6)
-#nmap <leader>7 <Plug>BuffetSwitch(7)
-#nmap <leader>8 <Plug>BuffetSwitch(8)
-#nmap <leader>9 <Plug>BuffetSwitch(9)
-#nmap <leader>0 <Plug>BuffetSwitch(10)
-#'''
-
-#[[plugins]]
-##repo = 'hardcoreplayers/spaceline.vim'
-#repo = '/home/bkit/spaceline.vim'
-#on_event = [["BufReadPre","BufNew"]]
-#hook_add = '''
-#let g:spaceline_seperate_style= 'arrow-fade'
-#let g:spaceline_colorscheme = 'one'
-#let g:spaceline_custom_vim_status =  {"n": "[N] ","V":"[V-Line] ","v":"[V] ","\<C-v>": "[V-Block] ","i":"[I] ","R":"[R] ","s":"[S] ","t":"[T] ","c":"[C] ","!":"SE"}
-#let g:spaceline_git_branch_icon = ' '
-#'''
-
 [[plugins]]
 repo = 'glepnir/galaxyline.nvim'
 rev = 'main'
 depends = 'nvim-web-devicons'
-hook_add = 'source $VIM_PATH/conf/statusline.lua'
+hook_add = '''lua require('config.statusline')'''
 
 #Completion
 [[plugins]]
@@ -146,26 +128,4 @@ repo = 'easymotion/vim-easymotion'
 hook_add = '''
 nmap ss <Plug>(easymotion-s2)
 '''
-#
-#[[plugins]]
-#repo = 'vim-airline/vim-airline'
-#hook_add = '''
-#let g:airline_powerline_fonts = 0
-#let g:airline#extensions#coc#enabled = 1
-#'''
-#
-#[[plugins]]
-#repo = 'vim-airline/vim-airline-themes'
-#hook_add = '''
-#let g:airline_theme='fruit_punch'
-#'''
-
-
-#[[plugins]]
-#repo = 'neomake/neomake'
-#hook_add = '''
-#call neomake#configure#automake('nrwi', 500)	" 自动检查
-#'''
-
-
 
